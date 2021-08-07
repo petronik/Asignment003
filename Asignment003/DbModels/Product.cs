@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 #nullable disable
 
@@ -29,8 +30,11 @@ namespace Asignment003.DbModels
         public string Category { get; set; }
         public byte[] Attachments { get; set; }
 
+        [XmlIgnore]
         public virtual ICollection<InventoryTransaction> InventoryTransactions { get; set; }
+        [XmlIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [XmlIgnore]
         public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
     }
 }

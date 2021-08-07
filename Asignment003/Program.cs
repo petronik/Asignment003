@@ -8,43 +8,74 @@ using System.Xml.Serialization;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Json;
+using Asignment003.DtoModels;
 
 namespace Asignment003
 {
     class Program
     {
         private static readonly northwindContext _context = new northwindContext();
-        public class Categories
-        {
-            public string Name { get; set; }
-        }
+        
         static void Main(string[] args)
         {
             var products = _context.Products.ToList();
-            List<Categories> catList = new List<Categories>();
+            List<Product> prodList = new List<Product>();
+            var productsDto = new List<ProductDto>();
 
-
-            foreach (var p in products)
+            foreach (var p in products) 
             {
-                Categories cat = p.Category;
-                catList.Add( (Categories)p.Category);
-                WriteLine($"{p.Category} ");
-            };
-            string xmlProducts = "products.xml";
-            ToXmlFile(xmlProducts, products);
+                ProductDto prod = new ProductDto
+                {
+                    SupplierIds = p.SupplierIds,
+                    Id = p.Id,
+                    ProductCode = p.ProductCode,
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    StandardCost = p.StandardCost,
+                    ListPrice = p.ListPrice,
+                    ReorderLevel = p.ReorderLevel,
+                    TargetLevel = p.TargetLevel,
+                    QuantityPerUnit = p.QuantityPerUnit,
+                    Discontinued = p.Discontinued,
+                    MinimumReorderQuantity = p.MinimumReorderQuantity,
+                    Category = p.Category,
+                    Attachments = p.Attachments
+                };
+                productsDto.Add(prod);
+            }
+            foreach(var p in prodList)
+            {
+                WriteLine(p.Category );
+            }
+
+            string xmlProductsDto = "productsDto.xml";
+            ToXmlFile(xmlProductsDto, productsDto);
 
             string jsonProductsDto = "productsDto.json";
-            ToJsonFile(jsonProductsDto, products);
+            ToJsonFile(jsonProductsDto, productsDto);
 
-            //string binaryProductsDto = "productsDto.dat";
-            //ToBinaryFile(binaryProductsDto, products);
+            string binaryProductsDto = "productsDto.dat";
+            ToBinaryFile(binaryProductsDto, productsDto);
 
-            //fileList.Sort();
-            //int place = 1;
-            //foreach (var file in fileList)
-            //{
-            //    WriteLine($"{place++}. {file.Name} : {file.Size} bytes");
-            //}
+            List<SerializedFile> fileList = new List<SerializedFile>
+            {
+                new SerializedFile{
+                    Name = xmlProductsDto,
+                    Size = new FileInfo(xmlProductsDto).Length},
+                new SerializedFile{
+                    Name = jsonProductsDto,
+                    Size = new FileInfo(jsonProductsDto).Length},
+                new SerializedFile{
+                    Name = binaryProductsDto,
+                    Size = new FileInfo(binaryProductsDto).Length},
+            };
+
+            fileList.Sort();
+            int place = 1;
+            foreach (var file in fileList)
+            {
+                WriteLine($"{place++}. {file.Name} : {file.Size} bytes");
+            }
 
             Console.WriteLine("Hello World!");
         }
