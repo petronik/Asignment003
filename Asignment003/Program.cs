@@ -77,14 +77,14 @@ namespace Asignment003
                 .Select(c => c.City)
                 .Distinct();
 
-            WriteLine($"\n\nPlease select City from the list:\n {string.Join(",", cityName)}");
+            WriteLine($"\n\nPlease select City from the list:\n {string.Join(", ", cityName)}");
             string customerCity = ReadLine();
 
             var companyInTheCity = customers
                 .Where(c => c.City == customerCity)
                 .Select(c => c.Company);
-
-            WriteLine(string.Join(",", companyInTheCity));
+            int count = companyInTheCity.Count();
+            WriteLine($"We found {companyInTheCity.Count()} companies in that city:\n{string.Join(",\n", companyInTheCity)}");
 
 
 
