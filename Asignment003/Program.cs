@@ -19,8 +19,8 @@ namespace Asignment003
         static void Main(string[] args)
         {
             var products = _context.Products.ToList();
-            List<Product> prodList = new List<Product>();
             var productsDto = new List<ProductDto>();
+            var customers = _context.Customers.ToList();
 
             foreach (var p in products) 
             {
@@ -42,10 +42,6 @@ namespace Asignment003
                     Attachments = p.Attachments
                 };
                 productsDto.Add(prod);
-            }
-            foreach(var p in prodList)
-            {
-                WriteLine(p.Category );
             }
 
             string xmlProductsDto = "productsDto.xml";
@@ -77,7 +73,21 @@ namespace Asignment003
                 WriteLine($"{place++}. {file.Name} : {file.Size} bytes");
             }
 
-            Console.WriteLine("Hello World!");
+            var cityName = customers
+                .Select(c => c.City)
+                .Distinct();
+
+            WriteLine($"\n\nPlease select City from the list:\n {string.Join(",", cityName)}");
+            string customerCity = ReadLine();
+
+            var companyInTheCity = customers
+                .Where(c => c.City == customerCity)
+                .Select(c => c.Company);
+
+            WriteLine(string.Join(",", companyInTheCity));
+
+
+
         }
         public static void ToXmlFile<T>(string file, T obj)
         {
